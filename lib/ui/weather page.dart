@@ -14,6 +14,7 @@ class WeatherPage extends StatefulWidget {
 class _WeatherPageState extends State<WeatherPage> {
   late WeatherBloc _bloc;
 
+
   @override
   void initState() {
     super.initState();
@@ -55,7 +56,7 @@ class _WeatherPageState extends State<WeatherPage> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(
-              backgroundColor: Colors.blueAccent,
+              backgroundColor: Colors.white,
             ),
           );
         } else if (snapshot.hasError) {
@@ -67,36 +68,62 @@ class _WeatherPageState extends State<WeatherPage> {
           );
         } else {
           final weatherData = snapshot.data!;
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  '${weatherData.temperature}°C',
-                  style: const TextStyle(fontSize: 50, color: Colors.white,fontWeight: FontWeight.bold),
-                ),
-                Text('Current temprature', style: const TextStyle(fontSize: 15, color: Colors.white),),
-                const SizedBox(height: 10),
-                Text(
-                  weatherData.description.toUpperCase(),
-                  style: const TextStyle(fontSize: 30, color: Colors.white),
-                ),
-              ],
-            ),
+          return Column(
+            children: [
+              buildAddress(weatherData),
+              const SizedBox(
+                height: 150,
+              ),
+              Text(
+                '${weatherData.temperature}°C',
+                style: const TextStyle(
+                    fontSize: 80,
+                    color: Colors.white,
+                    ),
+              ),
+               const Text(
+                'Current temprature',
+                style: TextStyle(fontSize: 15, color: Colors.white),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                weatherData.description.toUpperCase(),
+                style: const TextStyle(
+                    fontSize: 30,
+                    color: Colors.white,),
+              ),
+            ],
           );
         }
       },
     );
   }
 
+  Widget buildAddress(WeatherData weatherData) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(
+          Icons.circle_outlined,
+          color: Colors.white,
+          size: 30,
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        Text(
+          '${weatherData.city}, ${weatherData.country}',
+          style: const TextStyle(fontSize: 20, color: Colors.white),
+        ),
+      ],
+    );
+  }
+
   AppBar buildAppBar() {
     return AppBar(
       centerTitle: true,
-      backgroundColor: Colors.white10,
-      title: const Text(
-        'Weather',
-        style: TextStyle(color: Colors.white),
-      ),
+      backgroundColor: Colors.blueAccent,
+      title: const Icon(Icons.location_city,color: Colors.white),
     );
   }
 }
